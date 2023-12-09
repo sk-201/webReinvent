@@ -1,11 +1,35 @@
-import React from "react";
-import logo from "./logo.svg";
-import "./App.css";
+import React, { useEffect } from "react";
+import { Routes, Route, useNavigate } from "react-router-dom";
+import Dashboard from "./pages/dashboard";
+import { useSelector } from "react-redux";
+import { RootState } from "./redux/store";
+
+import SignIn from "./pages/signin";
+
+import SignUp from "./pages/signup";
 
 function App() {
+  const navigate = useNavigate();
+  const user = useSelector((state: RootState) => state.user);
+
+  useEffect(() => {
+    if (
+      !user &&
+      window.location.pathname !== "/signin" &&
+      window.location.pathname !== "/signup"
+    ) {
+      navigate("/signin");
+    }
+  }, [user]);
+
   return (
     <div>
-      <h1 className="text-3xl font-bold underline">Hello world!</h1>
+      <Routes>
+        <Route path="/dashboard" element={<Dashboard />} />
+
+        <Route path="/signin" element={<SignIn />} />
+        <Route path="/signup" element={<SignUp />} />
+      </Routes>
     </div>
   );
 }
